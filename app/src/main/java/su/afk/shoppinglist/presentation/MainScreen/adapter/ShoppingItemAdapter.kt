@@ -1,4 +1,4 @@
-package su.afk.shoppinglist.ui.adapter
+package su.afk.shoppinglist.presentation.MainScreen.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,14 +6,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import org.w3c.dom.Text
 import su.afk.shoppinglist.R
 import su.afk.shoppinglist.date.local.entity.ShoppingItem
-import su.afk.shoppinglist.ui.shoppingList.ShoppingViewModel
+
 
 class ShoppingItemAdapter(
     var items: List<ShoppingItem>,
-    private val viewModel: ShoppingViewModel
+    val listener: Listener
 ): RecyclerView.Adapter<ShoppingItemAdapter.ShoppingViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoppingViewHolder {
@@ -26,22 +25,25 @@ class ShoppingItemAdapter(
     }
 
     override fun onBindViewHolder(holder: ShoppingViewHolder, position: Int) {
-        val currentShoppingItem = items[position]
+        var currentShoppingItem = items[position]
 
         holder.tvName.text = currentShoppingItem.name
         holder.tvAmount.text = currentShoppingItem.amount.toString()
 
+
         holder.IvDelete.setOnClickListener {
-            viewModel.delete(currentShoppingItem)
+            listener.ivDelete(currentShoppingItem)
         }
 
         holder.IvPlus.setOnClickListener {
-            viewModel.upsert(currentShoppingItem)
+            currentShoppingItem.amount++
+            listener.ivPlus(currentShoppingItem)
         }
 
         holder.IvMinus.setOnClickListener {
+            currentShoppingItem.amount--
             if (currentShoppingItem.amount > 0) {
-                viewModel.delete(currentShoppingItem)
+                listener.ivPlus(currentShoppingItem)
             }
         }
     }
@@ -52,5 +54,12 @@ class ShoppingItemAdapter(
         val IvPlus = itemView.findViewById<ImageView>(R.id.IvPlus)
         val IvMinus = itemView.findViewById<ImageView>(R.id.IvMinus)
         val IvDelete = itemView.findViewById<ImageView>(R.id.IvDelete)
+
+    }
+
+    interface Listener{
+        fun ivDelete(item: ShoppingItem)
+        fun ivPlus(item: ShoppingItem)
+        fun ivMinus(item: ShoppingItem)
     }
 }

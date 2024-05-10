@@ -1,13 +1,18 @@
-package su.afk.shoppinglist.ui.shoppingList
+package su.afk.shoppinglist.presentation.MainScreen
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import su.afk.shoppinglist.date.local.entity.ShoppingItem
 import su.afk.shoppinglist.date.repositories.ShoppingRepository
+import javax.inject.Inject
 
-class ShoppingViewModel(
+@HiltViewModel
+class ShoppingViewModel @Inject constructor(
     private val repository: ShoppingRepository
 ): ViewModel() {
 
@@ -23,10 +28,8 @@ class ShoppingViewModel(
         }
     }
 
-    fun getAllItem() {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.getAllItem()
-        }
+    fun getAllItem(): LiveData<List<ShoppingItem>> {
+        return repository.getAllItem().asLiveData()
     }
 
 }

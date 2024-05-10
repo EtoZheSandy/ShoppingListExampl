@@ -1,22 +1,23 @@
 package su.afk.shoppinglist.date.repositories
 
-import androidx.lifecycle.LiveData
-import su.afk.shoppinglist.date.local.ShoppingDatabase
+import kotlinx.coroutines.flow.Flow
+import su.afk.shoppinglist.date.local.dao.ShoppingDao
 import su.afk.shoppinglist.date.local.entity.ShoppingItem
+import javax.inject.Inject
 
-class ShoppingRepository(
-    private val db: ShoppingDatabase,
+class ShoppingRepository @Inject constructor(
+    private val shoppingDao: ShoppingDao,
 ) {
 
     suspend fun upsert(item: ShoppingItem) {
-        db.getShoppingDao().updateInsert(item)
+        shoppingDao.updateInsert(item)
     }
 
     suspend fun delete(item: ShoppingItem) {
-        db.getShoppingDao().delete(item)
+        shoppingDao.delete(item)
     }
 
-    suspend fun getAllItem(): LiveData<List<ShoppingItem>> {
-        return db.getShoppingDao().getAllItems()
+    fun getAllItem(): Flow<List<ShoppingItem>> {
+        return shoppingDao.getAllItems()
     }
 }

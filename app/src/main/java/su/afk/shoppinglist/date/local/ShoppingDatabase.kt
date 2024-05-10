@@ -15,22 +15,22 @@ abstract class ShoppingDatabase: RoomDatabase() {
 
     abstract fun getShoppingDao(): ShoppingDao
 
-    //в Hilt проще указать application singl
-    companion object {
-        @Volatile
-        private var instance: ShoppingDatabase? = null
-        private val LOCK = Any()
-
-        operator fun invoke(context: Context) = instance ?: synchronized(LOCK){
-            instance ?: createDatabase(context).also { instance = it }
-        }
-
-        private fun createDatabase(context: Context): ShoppingDatabase {
-            return Room.databaseBuilder(
-                context = context,
-                ShoppingDatabase::class.java,
-                name = "ShoppingDb.db")
-                .build()
-        }
-    }
+//    //в Hilt application Singleton
+//    companion object {
+//        @Volatile
+//        private var instance: ShoppingDatabase? = null
+//        private val LOCK = Any()
+//
+//        operator fun invoke(context: Context) = instance ?: synchronized(LOCK){
+//            instance ?: createDatabase(context).also { instance = it }
+//        }
+//
+//        private fun createDatabase(context: Context): ShoppingDatabase {
+//            return Room.databaseBuilder(
+//                context = context,
+//                ShoppingDatabase::class.java,
+//                name = "ShoppingDb.db")
+//                .build()
+//        }
+//    }
 }

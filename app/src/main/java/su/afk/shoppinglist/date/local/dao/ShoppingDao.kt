@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 import su.afk.shoppinglist.date.local.entity.ShoppingItem
 
 @Dao
@@ -18,5 +19,5 @@ interface ShoppingDao {
     suspend fun delete(item: ShoppingItem)
 
     @Query("SELECT * FROM shopping_items")
-    suspend fun getAllItems(): LiveData<List<ShoppingItem>> //Flow лучше для бд
+    fun getAllItems(): Flow<List<ShoppingItem>>
 }
