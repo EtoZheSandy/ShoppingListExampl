@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity(), ShoppingItemAdapter.Listener {
             insets
         }
 
-        val adapter = ShoppingItemAdapter(listOf(), this)
+        val adapter = ShoppingItemAdapter(this)
 
         val rv = findViewById<RecyclerView>(R.id.recyclerView)
 
@@ -41,10 +41,9 @@ class MainActivity : AppCompatActivity(), ShoppingItemAdapter.Listener {
         rv.adapter = adapter
 
 
-        viewModel.getAllItem().observe(this, { items ->
-            adapter.items = items
-            adapter.notifyDataSetChanged()
-        })
+        viewModel.getAllItem().observe(this) { items ->
+            adapter.setItems(items)
+        }
 
         val fab = findViewById<FloatingActionButton>(R.id.fab)
 
@@ -65,11 +64,7 @@ class MainActivity : AppCompatActivity(), ShoppingItemAdapter.Listener {
         viewModel.delete(item)
     }
 
-    override fun ivPlus(item: ShoppingItem) {
-        viewModel.upsert(item)
-    }
-
-    override fun ivMinus(item: ShoppingItem) {
+    override fun ivUpdate(item: ShoppingItem) {
         viewModel.upsert(item)
     }
 }

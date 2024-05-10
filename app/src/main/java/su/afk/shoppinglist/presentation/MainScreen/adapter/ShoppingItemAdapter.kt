@@ -11,8 +11,7 @@ import su.afk.shoppinglist.date.local.entity.ShoppingItem
 
 
 class ShoppingItemAdapter(
-    var items: List<ShoppingItem>,
-    val listener: Listener
+    private val listener: Listener
 ): RecyclerView.Adapter<ShoppingItemAdapter.ShoppingViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoppingViewHolder {
@@ -20,12 +19,21 @@ class ShoppingItemAdapter(
         return ShoppingViewHolder(view)
     }
 
+    private var items: List<ShoppingItem> = listOf()
+
+    // Метод для установки списка элементов и обновления RecyclerView
+    fun setItems(newItems: List<ShoppingItem>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
+
+
     override fun getItemCount(): Int {
         return items.size
     }
 
     override fun onBindViewHolder(holder: ShoppingViewHolder, position: Int) {
-        var currentShoppingItem = items[position]
+        val currentShoppingItem = items[position]
 
         holder.tvName.text = currentShoppingItem.name
         holder.tvAmount.text = currentShoppingItem.amount.toString()
@@ -37,13 +45,13 @@ class ShoppingItemAdapter(
 
         holder.IvPlus.setOnClickListener {
             currentShoppingItem.amount++
-            listener.ivPlus(currentShoppingItem)
+            listener.ivUpdate(currentShoppingItem)
         }
 
         holder.IvMinus.setOnClickListener {
             currentShoppingItem.amount--
             if (currentShoppingItem.amount > 0) {
-                listener.ivPlus(currentShoppingItem)
+                listener.ivUpdate(currentShoppingItem)
             }
         }
     }
@@ -59,7 +67,6 @@ class ShoppingItemAdapter(
 
     interface Listener{
         fun ivDelete(item: ShoppingItem)
-        fun ivPlus(item: ShoppingItem)
-        fun ivMinus(item: ShoppingItem)
+        fun ivUpdate(item: ShoppingItem)
     }
 }

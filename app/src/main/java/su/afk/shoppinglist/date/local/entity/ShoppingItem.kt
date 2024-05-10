@@ -12,7 +12,7 @@ data class ShoppingItem(
     @ColumnInfo(name = "item_name")
     val name: String,
     @ColumnInfo(name = "item_amount")
-    val amount: Int
+    var amount: Int
 ) {
     companion object {
         const val TABLE_NAME = "shopping_items"
